@@ -38,10 +38,15 @@ require __DIR__.'/auth.php';
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function(){
     Route::match(['get', 'post'],'login' ,'AdminController@login');
      Route::group(['middleware' =>['admin']] , function(){
-        Route::get('dashboard' , 'AdminController@dashboard');
+        Route::get('dashboard' , 'AdminController@dashboard')->name('admin/dashboard');
         Route::match(['get' , 'post'] , 'update-admin-password' , 'AdminController@updateAdminPassword')->name('admin/update-admin-password');
         Route::match(['get' , 'post'] , 'update-admin-details' , 'AdminController@updateAdminDetails')->name('admin/update-admin-details');
         Route::post('/current-admin-password' , 'AdminController@currentAdminPassword');
+
+        // update vendor details
+        Route::match(['get' , 'post'] , 'update-vendor-details/{slug}' , 'AdminController@update-vendor-details');
+
+
         Route::get('logout' , 'AdminController@logout')->name('admin/logout');
    });
   
