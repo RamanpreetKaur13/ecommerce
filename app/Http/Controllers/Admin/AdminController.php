@@ -9,6 +9,9 @@ use App\helper;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
+use App\Models\Vendor;
+use App\Models\VendorsBusinessDetail;
+use App\Models\VendorsBankDetail;
 use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
@@ -55,16 +58,15 @@ class AdminController extends Controller
             if (Hash::check($data['current_password'], Auth::guard('admin')->user()->password)) {
                 //match confirm password and new password
                 if (($data['confirm_password'] == $data['password'])) {
-                   Admin::where('id' , Auth::guard('admin')->user()->id)->update(['password' => bcrypt($data['password'])]);
-                   return redirect()->back()->with('success_message' , 'Password Updated Successfully');
-                }
-                else {
-                    return  redirect()->back()->with('error_message' , 'Password not match with confirm password  !');
+                    Admin::where('id', Auth::guard('admin')->user()->id)->update(['password' => bcrypt($data['password'])]);
+                    return redirect()->back()->with('success_message', 'Password Updated Successfully');
+                } else {
+                    return  redirect()->back()->with('error_message', 'Password not match with confirm password  !');
                 }
 
-                return redirect()->back()->with('success_message' , 'Current Password is correct');
+                return redirect()->back()->with('success_message', 'Current Password is correct');
             } else {
-                return  redirect()->back()->with('error_message' , 'Current Password is incorrect !');
+                return  redirect()->back()->with('error_message', 'Current Password is incorrect !');
             }
         }
 
@@ -90,35 +92,190 @@ class AdminController extends Controller
             $data = $request->all();
             // print_data($data);
             // die();
-        $validated = $request->validate(['name' => 'required|regex:/^[\pL\s\-]+$/u' , 'mobile' => 'required|numeric']);
-            
-        //upload the admin image
-        if ($request->hasFile('admin_image')) {
-            $img_tmp = $request->file('admin_image');
-            if ($img_tmp->isValid()) {
-                //get the extension
-                $img_extension = $img_tmp->getClientOriginalExtension();
-                //generate new imge name 
-                $img_name = rand('111' , '9999').'.'.$img_extension;
+            $validated = $request->validate(['name' => 'required|regex:/^[\pL\s\-]+$/u', 'mobile' => 'required|numeric']);
 
-                //get img path 
-                $img_path = 'Admin/images/admin_images/'.$img_name;
-                //upload the image
-                Image::make($img_tmp)->save($img_path);
+            //upload the admin image
+            if ($request->hasFile('admin_image')) {
+                $img_tmp = $request->file('admin_image');
+                if ($img_tmp->isValid()) {
+                    //get the extension
+                    $img_extension = $img_tmp->getClientOriginalExtension();
+                    //generate new imge name 
+                    $img_name = rand('111', '9999') . '.' . $img_extension;
 
+                    //get img path 
+                    $img_path = 'Admin/images/admin_images/' . $img_name;
+                    //upload the image
+                    Image::make($img_tmp)->save($img_path);
+                }
+            } elseif (!empty($data['current_admin_image'])) {
+                $img_name = $data['current_admin_image'];
+            } else {
+                $img_name = "";
             }
-        }elseif (!empty($data['current_admin_image'])) {
-            $img_name = $data['current_admin_image'];
-        }
-        else{
-            $img_name = "";
-        }
-           Admin::where('id' , Auth::guard('admin')->user()->id)->update(['name' => $data['name'] , 'mobile' => $data['mobile'] , 'image' => $img_name]);
-           return redirect()->back()->with('success_message' , 'Admin details updated successfully');
+            Admin::where('id', Auth::guard('admin')->user()->id)->update(['name' => $data['name'], 'mobile' => $data['mobile'], 'image' => $img_name]);
+            return redirect()->back()->with('success_message', 'Admin details updated successfully');
         }
 
-     return view('admin.settings.update_details');
+        return view('admin.settings.update_details');
     }
+
+
+    public function updateVendorDetails(Request $request , $slug)
+    {
+
+        if ($slug == 'personal') {
+
+            if ($request->isMethod('post')) {
+                $data = $request->all();
+                     // print_data($data);
+              // die();
+                $validated = $request->validate([
+                    'vendor_name' => 'required|regex:/^[\pL\s\-]+$/u',
+                    'vendor_mobile' => 'required|numeric',
+                    'vendor_email' => 'required|email',
+                    'vendor_pincode' => 'required',
+                    'vendor_address' => 'required',
+                    'vendor_city' => 'required',
+                    'vendor_state' => 'required',
+                    'vendor_country' => 'required',
+                    ]);
+    
+                //upload the admin image
+                if ($request->hasFile('vendor_image')) {
+                    $img_tmp = $request->file('vendor_image');
+                    if ($img_tmp->isValid()) {
+                        //get the extension
+                        $img_extension = $img_tmp->getClientOriginalExtension();
+                        //generate new imge name 
+                        $img_name = rand('111', '9999') . '.' . $img_extension;
+    
+                        //get img path 
+                        $img_path = 'Admin/images/vendor_images/' . $img_name;
+                        //upload the image
+                        Image::make($img_tmp)->save($img_path);
+                    }
+                } elseif (!empty($data['current_vendor_image'])) {
+                    $img_name = $data['current_vendor_image'];
+                } else {
+                    $img_name = "";
+                }
+                //update in admin table
+                Admin::where('id', Auth::guard('admin')->user()->id)->update(['name' => $data['vendor_name'], 'mobile' => $data['vendor_mobile'], 'image' => $img_name]);
+              
+                //update in vendor table
+                Vendor::where('id', Auth::guard('admin')->user()->vendor_id)->update([
+                    'name' => $data['vendor_name'], 
+                    'email' => $data['vendor_email'], 
+                    'mobile' => $data['vendor_mobile'], 
+                    'pincode' => $data['vendor_pincode'], 
+                    'address' => $data['vendor_address'], 
+                    'city' => $data['vendor_city'], 
+                    'state' => $data['vendor_state'], 
+                    'country' => $data['vendor_country'], 
+                    'status' => $data['vendor_status'], 
+                    'vendor_image' => $img_name
+                ]);
+               
+                return redirect()->back()->with('success_message', 'vendor details updated successfully');
+            }
+         $vendorDetails = Vendor::where('id' , Auth::guard('admin')->user()->vendor_id)->first()->toArray();
+        //  return view('admin.settings.update_vendor_details')->with(compact('slug' , 'vendorDetails'));
+
+        }
+        elseif ($slug == 'business') {
+            if ($request->isMethod('post')) {
+                $data = $request->all();
+                     // print_data($data);
+              // die();
+                $validated = $request->validate([
+                    'shop_name' => 'required',
+                    'shop_mobile' => 'required|numeric',
+                    'shop_email' => 'required|email',
+                    'shop_pincode' => 'required',
+                    'shop_address' => 'required',
+                    'shop_city' => 'required',
+                    'shop_state' => 'required',
+                    'shop_country' => 'required',
+                    ]);
+    
+                //upload the admin image
+                if ($request->hasFile('address_proof_image')) {
+                    $img_tmp = $request->file('address_proof_image');
+                    if ($img_tmp->isValid()) {
+                        //get the extension
+                        $img_extension = $img_tmp->getClientOriginalExtension();
+                        //generate new imge name 
+                        $img_name = rand('111', '9999') . '.' . $img_extension;
+    
+                        //get img path 
+                        $img_path = 'Admin/images/proofs/' . $img_name;
+                        //upload the image
+                        Image::make($img_tmp)->save($img_path);
+                    }
+                } elseif (!empty($data['current_address_proof_image'])) {
+                    $img_name = $data['current_address_proof_image'];
+                } else {
+                    $img_name = "";
+                }
+               
+                //update in vendor Business table
+                VendorsBusinessDetail::where('vendor_id', Auth::guard('admin')->user()->vendor_id)->update([
+                    'shop_name' => $data['shop_name'], 
+                    'shop_email' => $data['shop_email'], 
+                    'shop_mobile' => $data['shop_mobile'], 
+                    'shop_pincode' => $data['shop_pincode'], 
+                    'shop_address' => $data['shop_address'], 
+                    'shop_city' => $data['shop_city'], 
+                    'shop_state' => $data['shop_state'], 
+                    'shop_country' => $data['shop_country'], 
+                    'shop_website' => $data['shop_website'], 
+                    'address_proof' => $data['address_proof'], 
+                    'business_licence_number' => $data['business_licence_number'], 
+                    'gst_number' => $data['gst_number'], 
+                    'pan_number' => $data['pan_number'],  
+                    'address_proof_image' => $img_name
+                ]);
+               
+                return redirect()->back()->with('success_message', 'Vendor business details updated successfully');
+            }
+            $vendorDetails = VendorsBusinessDetail::where('vendor_id' , Auth::guard('admin')->user()->vendor_id)->first()->toArray();
+            // return view('admin.settings.update_vendor_details')->with(compact('slug' , 'vendorsBusinessDetails'));
+
+        }
+         elseif($slug == 'bank'){
+            if ($request->isMethod('post')) {
+                $data = $request->all();
+                $validated = $request->validate([
+                    'account_holder_name' => 'required',
+                    'bank_name' => 'required',
+                    'account_number' => 'required',
+                    'bank_ifsc_code' => 'required',
+                    ]);
+                   
+                //update in vendor Business table
+                VendorsBankDetail::where('vendor_id', Auth::guard('admin')->user()->vendor_id)->update([
+                    'account_holder_name' => $data['account_holder_name'], 
+                    'bank_name' => $data['bank_name'], 
+                    'account_number' => $data['account_number'], 
+                    'bank_ifsc_code' => $data['bank_ifsc_code'], 
+                ]);
+               
+                return redirect()->back()->with('success_message', 'Vendor bank details updated successfully');
+            }
+            $vendorDetails = VendorsBankDetail::where('vendor_id' , Auth::guard('admin')->user()->vendor_id)->first()->toArray();
+
+        }
+        return view('admin.settings.update_vendor_details')->with(compact('slug' , 'vendorDetails'));
+
+    }
+
+
+
+
+
+
+
     public function logout()
     {
         Auth::guard('admin')->logout();
