@@ -121,7 +121,7 @@
 
               @if (!empty(Auth::guard('admin')->user()->image))
               <a target="_blank"
-                href="{{ url('Admin/images/vendor_images/'.Auth::guard('admin')->user()->image) }}">View Image</a>
+                href="{{ url('Admin/images/admin_images/'.Auth::guard('admin')->user()->image) }}">View Image</a>
               @endif
               <input type="hidden" name="current_vendor_image" value="{{ Auth::guard('admin')->user()->image }}">
             </div>

@@ -46,6 +46,12 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         // update vendor details
         Route::match(['get' , 'post'] , 'update-details/{slug}' , 'AdminController@updateVendorDetails');
 
+        //view admins , subadmins and vendors 
+        Route::get('admins/{type?}' , 'AdminController@viewAdmins' );
+        Route::get('/view-vendor-details/{id}' , 'AdminController@viewVendorDetails' );
+
+        Route::post('update-admin-status' , 'AdminController@updateAdminStatus');
+
 
         Route::get('logout' , 'AdminController@logout')->name('admin/logout');
    });

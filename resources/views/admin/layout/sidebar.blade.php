@@ -26,6 +26,37 @@
       @else
       
       <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#admin_mngt" aria-expanded="false" aria-controls="admin_mngt">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">Admin Management</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="admin_mngt">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admins/admins') }}">Admins</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admins/subadmins') }}">Sub Admins</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admins/vendors') }}">Vendors</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admins/') }}">All</a></li>
+
+          </ul>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#user_mngt" aria-expanded="false" aria-controls="user_mngt">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">User Management </span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="user_mngt">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admin/details') }}">Users</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('admin/admin/subscribers') }}">Subscribers</a></li>
+
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
           <i class="icon-layout menu-icon"></i>
           <span class="menu-title">Settings</span>

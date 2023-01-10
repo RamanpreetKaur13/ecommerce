@@ -151,7 +151,7 @@ class AdminController extends Controller
                         $img_name = rand('111', '9999') . '.' . $img_extension;
     
                         //get img path 
-                        $img_path = 'Admin/images/vendor_images/' . $img_name;
+                        $img_path = 'Admin/images/admin_images/' . $img_name;
                         //upload the image
                         Image::make($img_tmp)->save($img_path);
                     }
@@ -271,9 +271,53 @@ class AdminController extends Controller
     }
 
 
+    //   view vendors , admins and subadmins 
+    public function viewAdmins($type=null)
+    {
+        //  $admins = Admin::get()->toArray();
+        //  dd($admins);
+        $admins = Admin::query();
+       // dd($admins);
+        if (!empty($type)) {
+            $admins = $admins->where('type' ,$type);
+            //dd($admins);
+            $title = ucfirst($type);
+        }
+        else{
+            $title = "All Admins/Subadmins/Vendors";
+        }
+        $admins = $admins->get()->toArray();
+      // dd($admins);
+       return view('admin.admins.admins')->with(compact('admins' , 'title'));
 
+    }
 
+    public function viewVendorDetails($id){
+       
+        $vendorDetails  = Admin::with('vendor_personal','vendor_business','vendor_bank')->where('id' , $id)->first();
+        $vendorDetails = json_decode(json_encode($vendorDetails) , true);
+       //dd($vendorDetails);
+       return  view('admin.admins.view_vendor_detail' , compact('vendorDetails'));
+  
+    }
 
+    public  function updateAdminStatus(Request $request)
+    {
+       if ($request->ajax()) {
+        $data = $request->all();
+        // echo "<pre>" ;
+        // print_r($data);
+
+        if ($data['status'] == 'Active') {
+            $status = 0;
+        }else{
+            $status = 1;
+        }
+        Admin::where('id' , $data['admin_id'])->update(['status' => $status]);
+        return response()->json(['status' => $status , 'admin_id' => $data['admin_id']]);
+       
+       }
+    }
 
 
     public function logout()
