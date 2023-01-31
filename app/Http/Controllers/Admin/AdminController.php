@@ -12,7 +12,9 @@ use App\Models\Admin;
 use App\Models\Vendor;
 use App\Models\VendorsBusinessDetail;
 use App\Models\VendorsBankDetail;
+use App\Models\Country;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -52,7 +54,9 @@ class AdminController extends Controller
     }
 
     public function updateAdminPassword(Request $request)
+    
     {
+        Session::put('page' , 'update_admin_password');
         if ($request->isMethod('post')) {
             $data = $request->all();
             if (Hash::check($data['current_password'], Auth::guard('admin')->user()->password)) {
@@ -88,6 +92,7 @@ class AdminController extends Controller
     //update admin details 
     public function updateAdminDetails(Request $request)
     {
+        Session::put('page' , 'update_admin_details');
         if ($request->isMethod('post')) {
             $data = $request->all();
             // print_data($data);
@@ -125,7 +130,7 @@ class AdminController extends Controller
     {
 
         if ($slug == 'personal') {
-
+            Session::put('page' , 'update_personal_details');
             if ($request->isMethod('post')) {
                 $data = $request->all();
                      // print_data($data);
@@ -184,6 +189,8 @@ class AdminController extends Controller
 
         }
         elseif ($slug == 'business') {
+            Session::put('page' , 'update_business_details');
+
             if ($request->isMethod('post')) {
                 $data = $request->all();
                      // print_data($data);
@@ -244,6 +251,8 @@ class AdminController extends Controller
 
         }
          elseif($slug == 'bank'){
+            Session::put('page' , 'update_bank_details');
+
             if ($request->isMethod('post')) {
                 $data = $request->all();
                 $validated = $request->validate([
@@ -266,7 +275,9 @@ class AdminController extends Controller
             $vendorDetails = VendorsBankDetail::where('vendor_id' , Auth::guard('admin')->user()->vendor_id)->first()->toArray();
 
         }
-        return view('admin.settings.update_vendor_details')->with(compact('slug' , 'vendorDetails'));
+        $countries = Country::where('status' , 1)->get()->toArray();
+
+        return view('admin.settings.update_vendor_details')->with(compact('slug' , 'vendorDetails' , 'countries'));
 
     }
 
@@ -280,11 +291,14 @@ class AdminController extends Controller
        // dd($admins);
         if (!empty($type)) {
             $admins = $admins->where('type' ,$type);
+           
             //dd($admins);
             $title = ucfirst($type);
+            Session::put('page' , 'view_'.strtolower($title));
         }
         else{
             $title = "All Admins/Subadmins/Vendors";
+            Session::put('page' , 'view_all');
         }
         $admins = $admins->get()->toArray();
       // dd($admins);

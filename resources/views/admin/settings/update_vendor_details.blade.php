@@ -86,8 +86,15 @@
               </div>
               <div class="form-group col-md-4">
                 <label for="vendor_country">Country</label>
-                <input type="vendor_country" class="form-control" id="vendor_country" name="vendor_country"
-                  placeholder="Country" value="{{ $vendorDetails['country'] }}">
+                {{-- <input type="vendor_country" class="form-control" id="vendor_country" name="vendor_country"
+                  placeholder="Country" value="{{ $vendorDetails['country'] }}"> --}}
+
+                  <select class="form-control" name="vendor_country" id="vendor_country">
+                    @foreach ($countries as $country)
+                        <option value="{{ $country['country_name'] }}" @if ($country['country_name'] == $vendorDetails['country']) selected @endif>{{ $country['country_name'] }}</option>
+                    @endforeach
+                  </select>
+
                 @error('vendor_country')<span class="text-danger">{{ $message }}</span> @enderror
 
               </div>
@@ -203,8 +210,14 @@
               </div>
               <div class="form-group col-md-4">
                 <label for="shop_country" class="font-weight-bold text-dark">Country</label>
-                <input type="shop_country" class="form-control" id="shop_country" name="shop_country"
-                  placeholder="Shop Country" value="{{ $vendorDetails['shop_country'] }}">
+                {{-- <input type="shop_country" class="form-control" id="shop_country" name="shop_country"
+                  placeholder="Shop Country" value="{{ $vendorDetails['shop_country'] }}"> --}}
+                  
+                  <select class="form-control" name="shop_country" id="shop_country">
+                    @foreach ($countries as $country)
+                        <option value="{{ $country['country_name'] }}" @if ($country['country_name'] == $vendorDetails['shop_country']) selected @endif>{{ $country['country_name'] }}</option>
+                    @endforeach
+                  </select>
                 @error('shop_country')<span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>

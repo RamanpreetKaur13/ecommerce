@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
-
+use App\Http\Controllers\Admin\SectionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,9 +49,11 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         //view admins , subadmins and vendors 
         Route::get('admins/{type?}' , 'AdminController@viewAdmins' );
         Route::get('/view-vendor-details/{id}' , 'AdminController@viewVendorDetails' );
-
         Route::post('update-admin-status' , 'AdminController@updateAdminStatus');
 
+        //section routes
+        Route::get('sections' , 'SectionController@index' )->name('admin/sections');
+        Route::post('update-section-status' , 'SectionController@updateSectionStatus');
 
         Route::get('logout' , 'AdminController@logout')->name('admin/logout');
    });

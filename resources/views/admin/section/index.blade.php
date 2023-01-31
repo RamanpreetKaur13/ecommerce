@@ -6,7 +6,7 @@
       <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">{{ $title }}</h4>
+            <h4 class="card-title">Sections</h4>
             <p class="card-description">
               Add class <code>.table-bordered</code>
             </p>
@@ -16,10 +16,6 @@
                   <tr>
                     <th>Id</th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Image</th>
-                    <th>Type</th>
                     <th>Status</th>
                     <th>Action</th>
                     
@@ -27,33 +23,26 @@
                 </thead>
                 <tbody>
                    
-                  @foreach ($admins as $admin)
+                  @foreach ($sections as $section)
                   <tr>
-                    <td>{{ $admin['id'] }}</td>
-                    <td>{{ $admin['name'] }}</td>
-                    <td>{{ $admin['email'] }}</td>
-                    <td>{{ $admin['mobile'] }}</td>
-                    <td><img src="{{ asset('Admin/images/admin_images/'.$admin['image']) }}" alt="" srcset=""></td>
-                    <td>{{ $admin['type'] }}</td>
-                    <td>@if ($admin['status'] == 1)
+                    <td>{{ $section['id'] }}</td>
+                    <td>{{ $section['name'] }}</td>
+                    <td>@if ($section['status'] == 1)
                       <span style="font-size: 30px" class="pl-3">
-                        <a href="javascript:void(0);" id="admin-{{ $admin['id'] }}" admin_id = {{ $admin['id'] }}  class="updateAdminStatus">
+                        <a href="javascript:void(0);" id="section-{{ $section['id'] }}" section_id = {{ $section['id'] }}  class="updateSectionStatus">
                           <i class="mdi mdi-toggle-switch text-success" status="Active"></i>
                         </a>
                       </span>
                     @else
                     <span style="font-size: 30px"  class="pl-3">
-                      <a href="javascript:void(0);" id="admin-{{ $admin['id'] }}" admin_id = {{ $admin['id'] }} class="updateAdminStatus">
+                      <a href="javascript:void(0);" id="section-{{ $section['id'] }}" section_id = {{ $section['id'] }} class="updateSectionStatus">
                         <i class="mdi mdi-toggle-switch-off text-danger"  status="Inactive" ></i>
                       </a>
                     </span>
                     @endif
-                    @if ($admin['type'] == 'vendors')
-                    <td><span style="font-size: 22px"  class="pl-3 text-primary"><a href="{{ url('admin/view-vendor-details/'.$admin['id']) }}">
-                    <i class="mdi mdi-eye"></i></a></span></td>
-                    @else
-                    <td></td>
-                    @endif
+                    <td><span style="font-size: 20px"  class="pl-3"><a href=""> <i class="mdi mdi-pencil text-primary" ></i></a></span>
+                        <span style="font-size: 20px"  class="pl-3"><a href=""> <i class="mdi mdi-delete text-danger" ></i></a></span>
+                    </td>
                   </tr>
                   @endforeach
                 </tbody>
