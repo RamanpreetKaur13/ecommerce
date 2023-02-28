@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Section;
+use Illuminate\Support\Facades\Session;
 
 class SectionController extends Controller
 {
 
     public function index()
     {
+        Session::put('page' , 'sections');
         $sections = Section::where('status' ,1)->get();
         return view('admin.section.index' , compact('sections'));
     }
@@ -31,5 +33,26 @@ class SectionController extends Controller
         return response()->json(['status' => $status , 'section_id' => $data['section_id']]);
        
        }
+    }
+
+    public function addEditSection(Request $request , $id=null)
+    {
+        Session::put('page' , 'sections');
+        if ($id=="") {
+            $title = "Add Section";
+            $section = new Section;
+            $message = "Section added successfully";
+        } else {
+            $title = "Edit Section";
+            $section = Section::find($id);
+            $message = "Section updated successfully";
+        }
+        
+        return view('admin.section.add_edit_section')->with(compact('title' ,'section'));
+    }
+    public function deleteSection($id){
+        Section::where('id' ,$id)->delete();
+        return redirect()->back()->with('success_message' , 'Section Deleted successfully');
+
     }
 }

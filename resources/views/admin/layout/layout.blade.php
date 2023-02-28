@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{{ url('Admin/vendors/ti-icons/css/themify-icons.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url('Admin/js/select.dataTables.min.css') }}">
   <link rel="stylesheet" href="{{ url('Admin/vendors/mdi/css/materialdesignicons.min.css') }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
 
   <!-- End plugin css for this page -->
   <!-- inject:css -->
@@ -71,7 +72,10 @@
     <!-- Custom js for this page-->
     <script src="{{ url('Admin/js/dashboard.js') }}"></script>
     <script src="{{ url('Admin/js/Chart.roundedBarCharts.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
   <!-- End custom js for this page-->
+   <!-- sweet alert js -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   {{-- admin custom js --}}
   <script src="{{ url('Admin/js/admin_custom.js') }}"></script>

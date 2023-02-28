@@ -1,5 +1,6 @@
 $(document).ready(function(){
-
+    //datatables
+    $('#sections_table').DataTable();
     $('#current_password').keyup(function(){
 
         var current_password = $(this).val();
@@ -78,4 +79,41 @@ $(document).ready(function(){
             }
         });
     });
+
+    //confirm delete simple jquery(section)
+    // $('.ConfirmDelete').click(function(){
+    //     var title = $(this).attr('title');
+    //     //alert(title);
+    //     if (confirm('Are You sure you want to delete this ' +title)) {
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+    // })
+
+    $('.ConfirmDelete').click(function(){
+        var module = $(this).attr('module');
+        var module_id = $(this).attr('module_id');
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            timer: 3000
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success',
+                3000
+              )
+              window.location="delete-"+module+"/"+module_id;
+            }
+          })
+    })
 });

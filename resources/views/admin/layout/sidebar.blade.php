@@ -59,9 +59,9 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a @if(Session::get('page') == ('sections')) style="background: #fff !important; color:#4B49AC; !important; margin-right:8px;"
               @else style="background: #4B49AC; color:#fff;!important; margin-right:8px;" @endif  class="nav-link" href="{{ route('admin/sections') }}">Sections</a></li>
-            <li class="nav-item"> <a @if(Session::get('page') == ('view_subadmins')) style="background: #fff !important; color:#4B49AC; !important; margin-right:8px;"
+            <li class="nav-item"> <a @if(Session::get('page') == ('')) style="background: #fff !important; color:#4B49AC; !important; margin-right:8px;"
               @else style="background: #4B49AC; color:#fff;!important; margin-right:8px;" @endif class="nav-link" href="{{ url('admin/admins/subadmins') }}">Categories</a></li>
-            <li class="nav-item"> <a  @if(Session::get('page') == ('view_vendors')) style="background: #fff !important; color:#4B49AC; !important; margin-right:8px;"
+            <li class="nav-item"> <a  @if(Session::get('page') == ('')) style="background: #fff !important; color:#4B49AC; !important; margin-right:8px;"
               @else style="background: #4B49AC; color:#fff;!important; margin-right:8px;" @endif class="nav-link" href="{{ url('admin/admins/vendors') }}">Products</a></li>
             
 
