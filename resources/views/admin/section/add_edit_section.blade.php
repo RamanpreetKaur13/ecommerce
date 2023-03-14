@@ -25,26 +25,20 @@
             <div class="card-body">
               <h4 class="card-title">@if(empty($section->id)){{ $title }}@else {{ $title }} @endif</h4>
               <p class="card-description">
-               Update admin details
+              
               </p>
-              <form action="" name="updateAdminDetails"  id="updateAdminDetails" method="post" class="forms-sample" enctype="multipart/form-data">
+              <form @if(empty($section->id)) action="{{ url('admin/add-edit-section') }}"  @else action="{{ url('admin/add-edit-section/'.$section->id) }}"  @endif name="add_edit_section"  id="add_edit_section" method="post" class="forms-sample" enctype="multipart/form-data">
                 {{ csrf_field() }}
                
                 <div class="form-group">
-                  <label for="email">Email address</label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ Auth::guard('admin')->user()->email }}" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="name" class="form-control" id="name" name="name" placeholder="Name" value="{{ Auth::guard('admin')->user()->name }}">
-                  <span id="check_name"></span>
+                  <label for="name">Section Name</label>
+                  <input type="text" class="form-control" id="name" name="name" @if(empty($section->id)) value="{{ old('name') }}" @else  value="{{ $section->name }}" @endif >
                   @error('name')<span class="text-danger">{{ $message }}</span> @enderror
-                 
                 </div>
-
-                
-                
-                
+                {{-- <div class="form-group">
+                  <label for="status">Status</label>
+                  <input type="name" class="form-control" id="status" name="status" placeholder="Active or Inactive" @if(empty($section->id)) value="{{ old('status') }}" @else  value="{{ ($section->status  == 1 ) ? 'Active' : 'Inactive'}}" @endif>
+                </div> --}}
                 <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-light" type="reset">Cancel</button>
               </form>

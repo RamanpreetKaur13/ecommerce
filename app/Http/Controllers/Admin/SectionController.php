@@ -47,6 +47,22 @@ class SectionController extends Controller
             $section = Section::find($id);
             $message = "Section updated successfully";
         }
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+         //   dd($data);
+          $rules = [
+            'name' => 'required|regex:/^[a-zA-Z]+$/u'
+          ];
+          $customMessages = [
+            'name.required' => 'Section field is required',
+            'name.regex' => 'Please enter valid section name (only letters are allowed)'
+          ];
+          $this->validate($request , $rules , $customMessages);
+          $section->name = $data['name'];
+          $section->status = 1;
+          $section->save();
+          return redirect('admin/sections')->with('success_message' , $message);
+        }
         
         return view('admin.section.add_edit_section')->with(compact('title' ,'section'));
     }
