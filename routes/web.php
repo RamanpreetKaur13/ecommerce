@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +58,9 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('delete-section/{id}' , 'SectionController@deleteSection');
         Route::match(['get' , 'post'] , 'add-edit-section/{id?}' , 'SectionController@addEditSection');
 
+        //section routes
+        Route::get('categories' , 'CategoryController@index' )->name('admin/categories');
+        
         Route::get('logout' , 'AdminController@logout')->name('admin/logout');
    });
   
