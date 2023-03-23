@@ -60,7 +60,8 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
 
         //section routes
         Route::get('categories' , 'CategoryController@index' )->name('admin/categories');
-        
+        Route::post('update-category-status' , 'CategoryController@updateCategoryStatus');
+
         Route::get('logout' , 'AdminController@logout')->name('admin/logout');
    });
   

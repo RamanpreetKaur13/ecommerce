@@ -1,6 +1,7 @@
 $(document).ready(function(){
     //datatables
     $('#sections_table').DataTable();
+    $('#category_table').DataTable();
     $('#current_password').keyup(function(){
 
         var current_password = $(this).val();
@@ -115,5 +116,32 @@ $(document).ready(function(){
               window.location="delete-"+module+"/"+module_id;
             }
           })
-    })
+    });
+
+
+    //update Category status
+    $(document).on('click' , '.updateCategoryStatus' , function(){
+        var status = $(this).children("i").attr('status');
+        var category_id = $(this).attr('category_id');
+         //alert(status);
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type:'POST',
+            url:'/admin/update-category-status',
+            data:{status:status , category_id:category_id},
+            success:function(resp){
+                // alert(resp);
+                if (resp['status'] == 0) {
+                    $('#category-'+category_id).html('<i class="mdi mdi-toggle-switch-off text-danger"  status="Inactive" ></i>');
+                } else if(resp['status'] == 1) {
+                    $('#category-'+category_id).html('<i class="mdi mdi-toggle-switch text-success"  status="Active" ></i>');
+                }
+            },
+            error:function(){
+                alert("error");
+            }
+        });
+    });
 });
