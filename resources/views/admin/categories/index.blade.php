@@ -16,7 +16,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between">
             <h4 class="card-title">Categories</h4>
-            <a href="{{ url('admin/add-edit-categories') }}"><button class="btn btn-primary">Add Category</button></a>
+            <a href="{{ url('admin/category/create') }}"><button class="btn btn-primary">Add Category</button></a>
           </div>
           <p class="card-description">
             Add class <code>.table-bordered</code>
@@ -60,7 +60,7 @@
                       </a>
                     </span>
                     @endif
-                    <td><span style="font-size: 20px"  class="pl-3"><a href="{{ url('admin/add-edit-category/'.$category['id'])  }}"> <i class="mdi mdi-pencil text-primary" ></i></a></span>
+                    <td><span style="font-size: 20px"  class="pl-3"><a href="{{ url('admin/category/create/'.$category['id'])  }}"> <i class="mdi mdi-pencil text-primary" ></i></a></span>
                         {{-- <span style="font-size: 20px"  class="pl-3"><a title="category" class="ConfirmDelete" href="{{ url('admin/delete-category/'.$category['id'] ) }}"> <i class="mdi mdi-delete text-danger" ></i></a></span> --}}
                         <span style="font-size: 20px"  class="pl-3"><a module="category" module_id="{{ $category['id'] }}" class="ConfirmDelete" href="javascript:void(0);"> <i class="mdi mdi-delete text-danger" ></i></a></span>
                     </td>
